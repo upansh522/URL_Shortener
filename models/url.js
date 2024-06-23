@@ -18,3 +18,6 @@ const urlSchema= new mongoose.Schema({
 },
 {timestamp: true}
 )
+
+const Url=mongoose.model("Url",urlSchema);
+module.exports= {urlSchema};
