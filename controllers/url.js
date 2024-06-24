@@ -24,4 +24,33 @@ async function handleGenerateNewShortUrl(req, res) {
     }
 }
 
-module.exports = { handleGenerateNewShortUrl };
+async function handleRenderShortUrl(req, res) {
+    const id = req.params.id;
+
+    try {
+        const entry = await Url.findOneAndUpdate(
+            { shortUrl: id }, 
+            {
+                $push: {
+                    visitHistory: {
+                        timestamp: Date.now()
+                    }
+                }
+            },
+            { new: true } 
+        );
+
+        if (!entry) {
+            return res.status(404).json("Short URL not found");
+        }
+
+        res.redirect(entry.redirectUrl);
+    } catch (error) {
+        console.error("Error fetching and updating URL:", error);
+        res.status(500).json("Internal Server Error");
+    }
+}
+
+module.exports = { handleGenerateNewShortUrl,
+    handleRenderShortUrl
+ };
