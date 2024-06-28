@@ -4,13 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home Page</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
-    <h1>URL Shortner</h1>
-    <ol>
-    <% urls.forEach(url => { %>
-        <li><%= url.shortUrl %> - <%= url.visitHistory.length %></li>
-    <% }) %>
-    </ol>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4">
+    <div class="w-full max-w-md bg-white shadow-md rounded-lg p-6">
+        <h1 class="text-2xl font-bold text-center mb-6">URL Shortener</h1>
+        <form method="post" action="/url" class="flex flex-col space-y-4">
+            <label class="font-medium">Generate URL</label>
+            <input type="text" placeholder="https://example.com" name="redirectUrl" class="p-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-200">
+            <button class="p-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200">Submit</button>
+        </form>
+
+        <% if (locals.id) { %>
+            <p class="mt-4 text-green-500">URL generated: http://localhost:8080/<%= id %></p>
+        <% } %>
+    </div>
+
+    <div class="w-full max-w-4xl mt-8">
+        <% if (locals.urls) { %>
+            <table class="w-full bg-white shadow-md rounded-lg overflow-hidden">
+                <thead class="bg-gray-200">
+                    <tr>
+                        <th class="p-4 text-left">S. No.</th>
+                        <th class="p-4 text-left">Redirect URL</th>
+                        <th class="p-4 text-left">Generated URL</th>
+                        <th class="p-4 text-left">Visit Number</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% urls.forEach((element, index) => { %>
+                        <tr class="border-b hover:bg-gray-100 transition duration-150">
+                            <td class="p-4"><%= index + 1 %></td>
+                            <td class="p-4"><%= element.redirectUrl %></td>
+                            <td class="p-4"><%= element.shortUrl %></td>
+                            <td class="p-4"><%= element.visitHistory.length %></td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        <% } %>
+    </div>
 </body>
 </html>
