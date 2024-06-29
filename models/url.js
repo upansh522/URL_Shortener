@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Users = require("./user");
 
 const urlSchema = new mongoose.Schema({
     shortUrl: {
@@ -12,10 +13,11 @@ const urlSchema = new mongoose.Schema({
     },
     visitHistory: [{
         timestamp: { type: Number }
-    }]
+    }],
+    CreatedBy: mongoose.Schema.Types.ObjectId,
+    ref:"Users"
 }, 
-{ timestamps: true } 
-);
+{ timestamps: true });
 
 const Url = mongoose.model("Url", urlSchema);
 module.exports = { Url };
