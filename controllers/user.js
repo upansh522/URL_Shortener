@@ -7,6 +7,9 @@ async function handleSignUpPost(req, res) {
     if (!body || !body.FirstName || !body.LastName || !body.EmailId || !body.Password) {
         return res.status(400).json({ status: "BadRequest", message: "All fields are required." });
     }
+    else{
+        const sessionId = uuidv4();
+        res.cookie('uid',sessionId);        
 
     try {
         const createUser = await Users.create({
@@ -15,10 +18,12 @@ async function handleSignUpPost(req, res) {
             EmailId: body.EmailId,
             Password: body.Password
         });
+        setSSID(sessionId,createUser);
         res.status(201).redirect("/UrlShortner/homepage");
     } catch (error) {
         return res.status(500).redirect("/UrlShortner/signupPage");
     }
+  }  
 }
 
 async function handleLoginPost(req,res){
@@ -34,8 +39,7 @@ async function handleLoginPost(req,res){
         const sessionId=uuidv4();
         setSSID(sessionId,user);
         res.cookie("uid",sessionId);
-        try {
-            
+        try {            
             return res.redirect('/UrlShortner/homepage');
         } catch (err) {
             console.alert("404");
