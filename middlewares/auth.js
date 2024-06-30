@@ -1,22 +1,29 @@
-const {setSSID,getSSID}=require("../services/auth");
+const {getSSID}=require("../services/auth");
+require('dotenv').config();
+const secretPassword = process.env.SECRET_PASSWORD;
 
 function restrictuserToLogin(req,res,next){
-    const uid=req.cookies.uid;
+    const token=req.cookies.uid;
 
-    if (!uid)
+    if (!token)
         return res.redirect("/UrlShortner/LoginPage");
 
-    const user=getSSID(uid);
-
-    if (!user)
-        {
+    else{      
+        try {
+            const user=getSSID(token,secretPassword);
+            if (!user)
+                {
+                    return res.redirect("/UrlShortner/LoginPage");
+                }
+            else{
+                req.user=user;
+            }    
+            
+        } catch (error) {
             return res.redirect("/UrlShortner/LoginPage");
-        }
-    else{
-        req.user=user;
-        console.log(req.user);
-    }    
-    next();
+        }       
+}
+next();
 }
 
 module.exports={restrictuserToLogin};

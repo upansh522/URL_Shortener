@@ -1,12 +1,28 @@
-const sessionIdToUser= new Map();
+const jwt =require('jsonwebtoken');
+require('dotenv').config();
+const secretPassword = process.env.SECRET_PASSWORD;
 
-function setSSID(sessionId,user){
-    return sessionIdToUser.set(sessionId,user);
+function setSSID(user){
+    return jwt.sign(
+        {_id: user._id}
+        ,secretPassword);
 }
 
-function getSSID(sessionId,user)
+function getSSID(token,password)
 {
-    return sessionIdToUser.get(sessionId);
+    if (!token)
+        {
+            return res.redirect('/UrlShortner/LoginPage');
+        }
+        else{
+            try {
+                return jwt.verify(token,password);
+            } catch (error) {
+                return res.redirect('/UrlShortner/LoginPage');
+            }
+
+    
+        }
 }
 
 
