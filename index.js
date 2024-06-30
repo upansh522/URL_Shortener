@@ -7,6 +7,7 @@ const path =require("path");
 const userRouter= require("./routes/user");
 const {restrictuserToLogin}=require("./middlewares/auth");
 const cookieParser = require("cookie-parser");
+const {Users} =require("./models/user");
 
 const app=express();
 const PORT= 8080;
