@@ -32,14 +32,14 @@ async function handleLoginPost(req,res){
     const user=await Users.findOne({EmailId,Password});    
     if (!user)
         {
-
             res.redirect("/UrlShortner/LoginPage");
         }
     else{
         const sessionId=uuidv4();
         setSSID(sessionId,user);
         res.cookie("uid",sessionId);
-        try {            
+        try {
+            
             return res.redirect('/UrlShortner/homepage');
         } catch (err) {
             console.alert("404");
